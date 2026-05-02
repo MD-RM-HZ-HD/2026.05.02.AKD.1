@@ -108,7 +108,7 @@ const StateManager = {
 
 let State = {
     tab: 'mindmap', 
-    fontSize: parseInt(localStorage.getItem('fontSize')) || 16,
+    fontSize: parseInt(localStorage.getItem('fontSize')) || 20,
     activeSet: { mindmap: 1, qa: 1, tf: 1, cards: 1, mcq: 1, fill: 1, comp: 1 }, 
     cardsIdx: 0, cardsFlipped: false,
     tfIdx: 0, tfSelected: null, tfChecked: false, tfScore: 0,
