@@ -218,7 +218,6 @@ function initApp() {
         }
     });
 
-    // استشعار التمرير لعمل Autohide للهيدر 
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
@@ -452,11 +451,11 @@ function renderQA() {
             
             html += `
                 <div class="${borderClass}">
-                    <div class="text-sm md:text-base font-black text-[color:var(--accent-primary)] mb-2 flex items-start gap-2">
+                    <div class="text-base md:text-lg font-black text-[color:var(--accent-primary)] mb-2 flex items-start gap-2">
                         <span class="inline-flex shrink-0 items-center justify-center bg-[color:var(--bg-panel)] px-2 py-0.5 rounded text-xs border border-[color:var(--border-color)] shadow-sm">س ${index + 1}</span>
                         <span class="leading-relaxed">${item.q}</span>
                     </div>
-                    <div class="text-sm md:text-base font-bold leading-relaxed text-[color:var(--text-main)] bg-[color:var(--bg-panel-solid)] p-3 rounded-lg border-r-4 border-[color:var(--accent-green)] shadow-sm mr-2 md:mr-8">
+                    <div class="text-base md:text-lg font-bold leading-relaxed text-[color:var(--text-main)] bg-[color:var(--bg-panel-solid)] p-3 rounded-lg border-r-4 border-[color:var(--accent-green)] shadow-sm mr-2 md:mr-8">
                         ${item.a}
                     </div>
                 </div>
@@ -471,7 +470,7 @@ function renderQA() {
 function renderCards() {
     const active = State.activeSet.cards;
     const currentData = DB.cards[active];
-    if(!currentData || currentData.length === 0) return getProgressBar(0, 0, 'cards') + '<div class="text-center p-4">لا توجد بيانات</div>';
+    if(!currentData || currentData.length === 0) return getProgressBar(0, 0, 'cards') + '<div class="text-center p-4">لا توجد بطاقات</div>';
     if (State.cardsIdx >= currentData.length) return renderFinishScreen('البطاقات الذكية', currentData.length, currentData.length, 'cards');
     
     const data = currentData[State.cardsIdx];
@@ -479,8 +478,8 @@ function renderCards() {
         ${getProgressBar(State.cardsIdx, currentData.length, 'cards')}
         <div class="flip-card mt-6 mb-6" id="action-flip">
             <div class="flip-card-inner ${State.cardsFlipped ? 'rotate-y-180' : ''}" style="transform: ${State.cardsFlipped ? 'rotateY(180deg)' : 'none'}">
-                <div class="flip-card-front shadow-sm"><div class="text-base md:text-lg font-black leading-relaxed text-center">${data.q}</div></div>
-                <div class="flip-card-back shadow-md"><div class="text-base md:text-lg font-black leading-relaxed text-center">${data.a}</div></div>
+                <div class="flip-card-front shadow-sm"><div class="text-lg md:text-xl font-black leading-relaxed text-center">${data.q}</div></div>
+                <div class="flip-card-back shadow-md"><div class="text-lg md:text-xl font-black leading-relaxed text-center">${data.a}</div></div>
             </div>
         </div>
         <div class="flex justify-center gap-2 mt-4">
@@ -509,8 +508,9 @@ function renderTF() {
         `;
     }
 
-    let trueClasses = "opt-btn p-3 rounded-xl font-black text-sm md:text-base transition-all ";
-    let falseClasses = "opt-btn p-3 rounded-xl font-black text-sm md:text-base transition-all ";
+    // تطبيق ألوان الإجابات مثل الخيارات المتعددة (الأخضر للصحيح والأحمر للخاطئ)
+    let trueClasses = "opt-btn p-3 rounded-xl font-black text-base md:text-lg transition-all ";
+    let falseClasses = "opt-btn p-3 rounded-xl font-black text-base md:text-lg transition-all ";
 
     if (State.tfChecked) {
         if (data.a === true) trueClasses += "correct";
@@ -529,7 +529,7 @@ function renderTF() {
         ${getProgressBar(State.tfIdx, currentData.length, 'tf')}
         <div class="relative bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 md:p-6 rounded-2xl mt-5 mb-4">
             <div class="absolute -top-3 right-4 bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] px-3 py-1 rounded-lg text-xs font-black border border-[color:var(--bg-panel)]">صح / خطأ؟</div>
-            <h3 class="text-base md:text-lg font-black text-center leading-relaxed mt-2">${data.q}</h3>
+            <h3 class="text-lg md:text-xl font-black text-center leading-relaxed mt-2">${data.q}</h3>
         </div>
         <div class="grid grid-cols-2 gap-3">
             <button class="${trueClasses}" data-val="true">✅ صواب</button>
@@ -551,7 +551,7 @@ function renderMCQ() {
     const data = currentData[State.mcqIdx]; 
     let msgHTML = '';
     let optsHTML = data.opts.map((opt, i) => {
-        let classes = "opt-btn p-2 rounded-xl font-bold text-right mb-1 block w-full text-sm md:text-base transition-all ";
+        let classes = "opt-btn p-2 rounded-xl font-bold text-right mb-1 block w-full text-base md:text-lg transition-all ";
         if (State.mcqChecked) { 
             if (i === data.correct) classes += "correct"; 
             else if (i === State.mcqSelected) classes += "wrong"; 
@@ -572,7 +572,7 @@ function renderMCQ() {
     
     return `
         ${getProgressBar(State.mcqIdx, currentData.length, 'mcq')}
-        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] border-r-4 border-r-[color:var(--accent-primary)] p-4 rounded-xl mt-4 mb-4"><h3 class="text-base md:text-lg font-black leading-relaxed">${data.q}</h3></div>
+        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] border-r-4 border-r-[color:var(--accent-primary)] p-4 rounded-xl mt-4 mb-4"><h3 class="text-lg md:text-xl font-black leading-relaxed">${data.q}</h3></div>
         <div class="mt-2">${optsHTML}</div>
         ${msgHTML}
         <div class="flex justify-center mt-5">
@@ -597,15 +597,15 @@ function renderFill() {
         if (Array.isArray(data.a)) { isCorrect = data.a.some(ans => ans.trim() === userVal || userVal.includes(ans.trim())); correctAnswer = data.a[0]; } 
         else { isCorrect = userVal !== '' && (data.a.includes(userVal) || userVal.includes(data.a)); correctAnswer = data.a; }
 
-        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-3 bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
-        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-2 bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
+        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-base md:text-lg font-black py-3 bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
+        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-base md:text-lg font-black py-2 bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
     } else {
-        inputBoxHTML = `<input type="text" id="fill-input" class="input-stylish text-center text-sm md:text-base font-black py-3 w-full shadow-sm focus:ring-2 focus:ring-[color:var(--accent-primary)] transition-all" placeholder="اكتب الكلمة هنا..." value="${State.fillVal}" autocomplete="off">`;
+        inputBoxHTML = `<input type="text" id="fill-input" class="input-stylish text-center text-base md:text-lg font-black py-3 w-full shadow-sm focus:ring-2 focus:ring-[color:var(--accent-primary)] transition-all" placeholder="اكتب الكلمة هنا..." value="${State.fillVal}" autocomplete="off">`;
     }
     
     return `
         ${getProgressBar(State.fillIdx, currentData.length, 'fill')}
-        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 md:p-6 rounded-xl mt-4 mb-6 text-center shadow-sm"><div class="text-base md:text-lg font-black leading-loose">${textHTML}</div></div>
+        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 md:p-6 rounded-xl mt-4 mb-6 text-center shadow-sm"><div class="text-lg md:text-xl font-black leading-loose">${textHTML}</div></div>
         <div class="relative w-full max-w-md mx-auto mb-2">${inputBoxHTML}</div>
         ${!State.fillChecked ? `<div class="flex justify-center mt-6"><button class="action-btn max-w-xs bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] text-sm py-3 border-2 border-[color:var(--border-color)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-sm flex items-center justify-center gap-2" id="btn-check"><span class="text-xl">✔️</span> تحقق من الإجابة</button></div>` : ''}
         <div class="flex justify-center mt-6 pt-4 border-t border-dashed border-[color:var(--border-color)]"><button class="action-btn max-w-xs text-sm py-3 shadow-md" id="btn-next" ${!State.fillChecked ? 'disabled' : ''}>${State.fillIdx === currentData.length - 1 ? '🏁 إنهاء القسم' : 'التالية'}</button></div>
@@ -640,21 +640,21 @@ function renderComp() {
 
     let colA_HTML = data.criteria.map((c) => `
         <div class="mb-4 last:mb-0">
-            <div class="text-xs md:text-sm font-black text-[color:var(--accent-primary)] mb-2 border-b border-dashed border-[color:var(--border-color)] pb-1">▪️ ${c.label}</div>
-            <div class="p-2 text-sm leading-relaxed text-right font-bold animate-fade-in bg-transparent border-none">${c.answerA}</div>
+            <div class="text-sm md:text-base font-black text-[color:var(--accent-primary)] mb-2 border-b border-dashed border-[color:var(--border-color)] pb-1">▪️ ${c.label}</div>
+            <div class="p-2 text-base leading-relaxed text-right font-bold animate-fade-in bg-transparent border-none">${c.answerA}</div>
         </div>
     `).join('');
 
     let colB_HTML = data.criteria.map((c) => `
         <div class="mb-4 last:mb-0">
-            <div class="text-xs md:text-sm font-black text-[color:var(--accent-primary)] mb-2 border-b border-dashed border-[color:var(--border-color)] pb-1">▪️ ${c.label}</div>
-            <div class="p-2 text-sm leading-relaxed text-right font-bold animate-fade-in bg-transparent border-none">${c.answerB}</div>
+            <div class="text-sm md:text-base font-black text-[color:var(--accent-primary)] mb-2 border-b border-dashed border-[color:var(--border-color)] pb-1">▪️ ${c.label}</div>
+            <div class="p-2 text-base leading-relaxed text-right font-bold animate-fade-in bg-transparent border-none">${c.answerB}</div>
         </div>
     `).join('');
     
     return `
         ${getProgressBar(State.compIdx, currentData.length, 'comp')}
-        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 rounded-xl mt-4 mb-6 shadow-sm"><h3 class="text-base md:text-lg font-black text-center text-[color:var(--accent-primary)] leading-relaxed">${data.title}</h3></div>
+        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 rounded-xl mt-4 mb-6 shadow-sm"><h3 class="text-lg md:text-xl font-black text-center text-[color:var(--accent-primary)] leading-relaxed">${data.title}</h3></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div class="bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] overflow-hidden shadow-sm flex flex-col animate-fade-in"><div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">${data.caseA_label}</div><div class="p-4 bg-[color:var(--bg-main)] flex-1">${colA_HTML}</div></div>
             <div class="bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] overflow-hidden shadow-sm flex flex-col animate-fade-in" style="animation-delay: 0.1s"><div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">${data.caseB_label}</div><div class="p-4 bg-[color:var(--bg-main)] flex-1">${colB_HTML}</div></div>
