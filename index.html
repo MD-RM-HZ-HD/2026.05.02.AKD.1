@@ -17,17 +17,20 @@
 </head>
 <body class="bg-[color:var(--bg-main)] font-sans text-[color:var(--text-main)]">
 
-    <!-- الهيدر العائم والذكي (Docked on top with Autohide) -->
-    <div id="header-wrapper" class="fixed top-0 left-0 right-0 z-[100] p-2 md:p-4 transition-transform duration-300">
-        <header class="glass-panel p-3 max-w-6xl mx-auto flex items-center justify-between gap-3 shadow-xl">
+    <!-- الهيدر العائم والذكي بدون حاوية خلفية -->
+    <div id="header-wrapper" class="fixed top-0 left-0 right-0 z-[100] p-3 md:p-4 transition-transform duration-300 pointer-events-none">
+        <header class="max-w-6xl mx-auto flex items-center justify-between gap-3">
             
-            <!-- زر القائمة (Hamburger) للجوال -->
-            <button id="top-nav-btn" class="md:hidden px-4 py-2 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm font-bold flex items-center justify-center hover:bg-[color:var(--bg-panel-hover)] transition-all focus:outline-none">
-                <span class="text-2xl leading-none">☰</span>
-            </button>
+            <!-- زر القائمة للجوال (يحتوي على الأيقونة والكلمة معاً) -->
+            <div class="flex items-center gap-2 md:hidden">
+                <button id="top-nav-btn" class="pointer-events-auto px-4 py-2 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] shadow-sm font-bold flex items-center justify-center gap-2 hover:bg-[color:var(--bg-panel-hover)] transition-all focus:outline-none">
+                    <span class="text-xl leading-none">☰</span>
+                    <span class="text-sm">الأقسام</span>
+                </button>
+            </div>
 
             <!-- حاوية التبويبات (للديسكتوب) -->
-            <nav id="top-nav-menu" class="hidden md:flex flex-wrap justify-center items-center gap-2 flex-1">
+            <nav id="top-nav-menu" class="pointer-events-auto hidden md:flex flex-wrap justify-center items-center gap-2 flex-1 bg-[color:var(--bg-panel-solid)] p-2 rounded-full border-2 border-[color:var(--border-color)] shadow-lg backdrop-blur-md">
                 <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
                 <button class="pill-btn" data-tab="qa">الأسئلة</button>
                 <button class="pill-btn" data-tab="cards">البطاقات</button>
@@ -37,21 +40,20 @@
                 <button class="pill-btn" data-tab="comp">المقارنات</button>
             </nav>
 
-            <!-- زر الإعدادات (ثابت في الجوال والديسكتوب) -->
-            <button id="top-settings-btn" class="px-4 py-2 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm flex items-center justify-center hover:bg-[color:var(--bg-panel-hover)] transition-all ml-auto md:ml-0 focus:outline-none">
-                <span class="text-2xl leading-none">⚙️</span>
+            <!-- زر الإعدادات (دائري تماماً) -->
+            <button id="top-settings-btn" class="pointer-events-auto w-11 h-11 md:w-12 md:h-12 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] shadow-sm flex items-center justify-center hover:bg-[color:var(--bg-panel-hover)] transition-all ml-auto md:ml-0 focus:outline-none shrink-0">
+                <span class="text-xl md:text-2xl leading-none">⚙️</span>
             </button>
 
         </header>
     </div>
 
-    <!-- الحاوية الأساسية (مع إزاحة علوية لمنع التداخل مع الهيدر العائم) -->
-    <div class="max-w-6xl mx-auto pt-24 md:pt-28 pb-10 px-2 md:px-4" id="app-container" style="font-size: 16px;">
-        <!-- منطقة عرض المحتوى -->
+    <!-- الحاوية الأساسية للمحتوى -->
+    <div class="max-w-6xl mx-auto pt-20 md:pt-28 pb-10 px-2 md:px-4" id="app-container" style="font-size: 16px;">
         <div id="content-area" class="glass-panel p-4 md:p-6 min-h-[70vh]"></div>
     </div>
 
-    <!-- نافذة الإعدادات المنبثقة (Modal) -->
+    <!-- نافذة الإعدادات المنبثقة -->
     <div id="settings-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
         <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-2xl shadow-2xl p-5 w-full max-w-sm flex flex-col gap-4 relative transform scale-95 transition-transform duration-300" id="settings-modal-content">
             <button id="close-settings-btn" class="absolute top-3 left-4 text-xl font-black text-[color:var(--accent-danger)] hover:scale-110 transition-transform focus:outline-none">×</button>
@@ -77,13 +79,13 @@
 
             <div class="border-t-2 border-dashed border-[color:var(--border-color)] pt-3">
                 <button id="btn-reset" class="w-full p-3 bg-[color:var(--accent-danger)] text-white font-black text-sm rounded-lg hover:opacity-90 transition-all shadow-md flex justify-center items-center gap-2 focus:outline-none">
-                    <span class="text-lg">🔄</span> مسح وبدء من جديد
+                    <span class="text-lg">🔄</span> مسح الاختبار
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- نافذة الأقسام المنبثقة للجوال (Modal) -->
+    <!-- نافذة الأقسام المنبثقة للجوال -->
     <div id="nav-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
         <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-2xl shadow-2xl p-5 w-full max-w-sm flex flex-col gap-3 relative transform scale-95 transition-transform duration-300" id="nav-modal-content">
             <button id="close-nav-btn" class="absolute top-3 left-4 text-xl font-black text-[color:var(--accent-danger)] hover:scale-110 transition-transform focus:outline-none">×</button>
@@ -101,7 +103,7 @@
         </div>
     </div>
 
-    <!-- استدعاء ملفات البيانات -->
+    <!-- استدعاء ملفات البيانات والسكربت -->
     <script src="./data/data.Mind.Map.js"></script>
     <script src="./data/data.Lesson.Questions.js"></script>
     <script src="./data/data.Mind.Map.1.js"></script>
@@ -115,8 +117,6 @@
     <script src="./data/data.qz.Fill.Blank.1.js"></script>
     <script src="./data/data.qz.Compare.js"></script>
     <script src="./data/data.qz.Compare.1.js"></script>
-
-    <!-- استدعاء السكربت الرئيسي -->
     <script src="./js/script.js"></script>
 </body>
 </html>
