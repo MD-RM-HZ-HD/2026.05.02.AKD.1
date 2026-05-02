@@ -54,9 +54,9 @@ const THEMES = [
     { 
         name: "الوضع الليلي", 
         vars: { 
-            '--bg-main': '#000000', /* أسود قاتم للخلفية */
-            '--bg-panel': '#000000', /* أسود قاتم للخلفية */
-            '--bg-panel-solid': '#000000', /* أسود قاتم للخلفية */
+            '--bg-main': '#000000', 
+            '--bg-panel': '#000000', 
+            '--bg-panel-solid': '#000000',
             '--bg-panel-hover': '#1e2621', 
             '--border-color': '#4C6054', 
             '--accent-primary': '#4C6054', 
@@ -73,7 +73,6 @@ const THEMES = [
     }
 ];
 
-// --- إدارة الحالة المتقدمة ---
 const StateManager = {
     saveState: function(stateObj) { localStorage.setItem('exam_app_state', JSON.stringify(stateObj)); },
     loadState: function() { const saved = localStorage.getItem('exam_app_state'); return saved ? JSON.parse(saved) : null; },
@@ -134,6 +133,7 @@ const DOM = {
     settingsModalContent: document.getElementById('settings-modal-content'),
     navModal: document.getElementById('nav-modal'),
     navModalContent: document.getElementById('nav-modal-content'),
+    headerWrapper: document.getElementById('header-wrapper')
 };
 
 function updateTabCounters() {
@@ -179,7 +179,6 @@ function randomizeAllQuestions() {
     });
 }
 
-// دوال إدارة النوافذ المنبثقة
 function openModal(modal, content) {
     modal.classList.remove('hidden');
     setTimeout(() => {
@@ -205,17 +204,12 @@ function initApp() {
     if(DOM.themeSelect) DOM.themeSelect.value = savedTheme !== null && THEMES[savedTheme] ? savedTheme : 0;
     applyTheme(DOM.themeSelect ? parseInt(DOM.themeSelect.value) : 0);
 
-    // ربط أزرار فتح وإغلاق الإعدادات
     document.getElementById('top-settings-btn')?.addEventListener('click', () => openModal(DOM.settingsModal, DOM.settingsModalContent));
-    document.getElementById('side-settings-btn')?.addEventListener('click', () => openModal(DOM.settingsModal, DOM.settingsModalContent));
     document.getElementById('close-settings-btn')?.addEventListener('click', () => closeModal(DOM.settingsModal, DOM.settingsModalContent));
 
-    // ربط أزرار فتح وإغلاق الأقسام
     document.getElementById('top-nav-btn')?.addEventListener('click', () => openModal(DOM.navModal, DOM.navModalContent));
-    document.getElementById('side-nav-btn')?.addEventListener('click', () => openModal(DOM.navModal, DOM.navModalContent));
     document.getElementById('close-nav-btn')?.addEventListener('click', () => closeModal(DOM.navModal, DOM.navModalContent));
 
-    // الإغلاق عند الضغط خارج النافذة
     [DOM.settingsModal, DOM.navModal].forEach(modal => {
         if(modal) {
             modal.addEventListener('click', (e) => {
@@ -224,17 +218,17 @@ function initApp() {
         }
     });
 
-    // استشعار حركة التمرير
-    const mainHeader = document.getElementById('main-header');
-    const floatingActions = document.getElementById('floating-actions');
+    // استشعار التمرير لعمل Autohide للهيدر العائم
+    let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 80) {
-            mainHeader.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-            floatingActions.classList.remove('translate-x-20', 'opacity-0', 'pointer-events-none');
+        const currentScrollY = window.scrollY;
+        // إخفاء عند النزول، إظهار عند الصعود (مع إضافة هامش 50 بكسل لتجنب الارتجاج)
+        if (currentScrollY > 50 && currentScrollY > lastScrollY) {
+            DOM.headerWrapper.classList.add('-translate-y-full');
         } else {
-            mainHeader.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
-            floatingActions.classList.add('translate-x-20', 'opacity-0', 'pointer-events-none');
+            DOM.headerWrapper.classList.remove('-translate-y-full');
         }
+        lastScrollY = currentScrollY;
     });
 
     if(DOM.btnReset) {
@@ -440,6 +434,7 @@ function renderMindmap() {
     `;
 }
 
+// دالة العرض المحدثة لتبويب الأسئلة (بدون حاويات ثقيلة)
 function renderQA() {
     const active = State.activeSet.qa || 1; 
     const currentData = DB.qa[active];
@@ -447,29 +442,35 @@ function renderQA() {
 
     let html = '';
     
-    currentData.forEach((section, secIndex) => {
-        const isActive = secIndex === 0 ? 'active' : '';
+    currentData.forEach((section) => {
         html += `
-            <div class="accordion-item ${isActive}">
-                <button class="accordion-header"><div class="flex items-center text-right font-black">📚 ${section.lesson}</div><span class="accordion-icon">▼</span></button>
-                <div class="accordion-body"><div class="py-6 flex flex-col gap-6 p-4 md:p-6 bg-[color:var(--bg-main)]">
+            <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-xl overflow-hidden mb-6 shadow-sm animate-fade-in">
+                <div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">
+                    📚 ${section.lesson}
+                </div>
+                <div class="p-3 md:p-5 bg-[color:var(--bg-main)]">
         `;
+        
         section.questions.forEach((item, index) => {
+            const isLast = index === section.questions.length - 1;
+            const borderClass = isLast ? '' : 'border-b border-dashed border-[color:var(--border-color)] pb-4 mb-4';
+            
             html += `
-                <div class="bg-[color:var(--bg-panel)] p-6 rounded-2xl border-2 border-[color:var(--border-color)] hover:border-[color:var(--accent-primary)] transition-all shadow-sm">
-                    <div class="text-right mb-5">
-                        <span class="inline-block bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] px-3 py-1 rounded-lg font-black text-lg ml-3 mb-2 shadow-sm">س ${index + 1}</span>
-                        <span class="font-black text-xl leading-relaxed text-[color:var(--text-main)] block mt-2">${item.q}</span>
+                <div class="${borderClass}">
+                    <div class="text-sm md:text-base font-black text-[color:var(--accent-primary)] mb-2 flex items-start gap-2">
+                        <span class="inline-flex shrink-0 items-center justify-center bg-[color:var(--bg-panel)] px-2 py-0.5 rounded text-xs border border-[color:var(--border-color)] shadow-sm">س ${index + 1}</span>
+                        <span class="leading-relaxed">${item.q}</span>
                     </div>
-                    <div class="p-5 rounded-xl mt-3 bg-[color:var(--bg-panel-solid)] border-r-4 border-[color:var(--accent-primary)] border-y-2 border-l-2 border-[color:var(--border-color)] shadow-sm">
-                        <div class="flex items-start"><span class="font-black text-2xl text-[color:var(--accent-green)] ml-3">←</span><span class="font-bold leading-relaxed text-lg text-[color:var(--text-main)]">${item.a}</span></div>
+                    <div class="text-sm md:text-base font-bold leading-relaxed text-[color:var(--text-main)] bg-[color:var(--bg-panel-solid)] p-3 rounded-lg border-r-4 border-[color:var(--accent-green)] shadow-sm mr-2 md:mr-8">
+                        ${item.a}
                     </div>
                 </div>
             `;
         });
-        html += `</div></div></div>`;
+        
+        html += `</div></div>`;
     });
-    return `<div class="pb-8">${html}</div>`;
+    return `<div class="pb-4">${html}</div>`;
 }
 
 function renderCards() {
@@ -662,10 +663,6 @@ function attachDynamicListeners() {
     const check = document.getElementById('btn-check'); 
     const flip = document.getElementById('action-flip'); 
     const fillInp = document.getElementById('fill-input');
-    
-    document.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', () => header.parentElement.classList.toggle('active'));
-    });
     
     if(next) next.addEventListener('click', () => window.move(1));
     
