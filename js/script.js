@@ -1,3 +1,4 @@
+// --- تهيئة قاعدة البيانات وربط المتغيرات (للملفات الخارجية) ---
 const DB = {
     mindmapTree: {
         1: typeof Mind_Map !== 'undefined' ? Mind_Map.children : null,
@@ -28,7 +29,7 @@ const DB = {
     }
 };
 
-// --- المظاهر (الوضع الليلي تم تعيينه لـ #000000 بالكامل) ---
+// --- المظاهر ---
 const THEMES = [
     { 
         name: "الأخضر الغابي (فاتح)", 
@@ -437,9 +438,9 @@ function renderQA() {
         const isActive = secIndex === 0 ? 'active' : '';
         html += `
             <div class="accordion-item ${isActive}">
-                <button class="accordion-header bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] w-full flex justify-between items-center font-black text-sm md:text-base py-3 px-4 focus:outline-none border-none">
+                <button class="accordion-header bg-[color:var(--accent-primary)] text-white w-full flex justify-between items-center font-black text-sm md:text-base py-3 px-4 focus:outline-none border-none">
                     <span>📚 ${section.lesson}</span>
-                    <span class="accordion-icon font-black">▼</span>
+                    <span class="accordion-icon font-black text-white bg-black/20">▼</span>
                 </button>
                 <div class="accordion-body">
                     <div class="p-3 md:p-5 flex flex-col gap-4">
@@ -499,10 +500,11 @@ function renderTF() {
     let msgHTML = '';
     if (State.tfChecked) {
         const isCorrect = State.tfSelected === data.a;
+        // إزالة الشفافية وجعل اللون صلباً لضمان وضوح النص
         msgHTML = `
-            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
+            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ دقيق!' : '❌ خطأ! الجواب: ' + (data.a ? 'صواب' : 'خطأ')}</div>
-                ${data.exp ? `<div class="pt-2 border-t border-[color:var(--accent-text)]/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
+                ${data.exp ? `<div class="pt-2 border-t border-white/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
             </div>
         `;
     }
@@ -544,10 +546,11 @@ function renderMCQ() {
     
     if (State.mcqChecked) {
         const isCorrect = State.mcqSelected === data.correct;
+        // إزالة الشفافية وجعل اللون صلباً لضمان وضوح النص
         msgHTML = `
-            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
+            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ صح!' : '❌ خطأ!'}</div>
-                ${data.exp ? `<div class="pt-2 border-t border-[color:var(--accent-text)]/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
+                ${data.exp ? `<div class="pt-2 border-t border-white/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
             </div>
         `;
     }
@@ -579,8 +582,8 @@ function renderFill() {
         if (Array.isArray(data.a)) { isCorrect = data.a.some(ans => ans.trim() === userVal || userVal.includes(ans.trim())); correctAnswer = data.a[0]; } 
         else { isCorrect = userVal !== '' && (data.a.includes(userVal) || userVal.includes(data.a)); correctAnswer = data.a; }
 
-        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-3 bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
-        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-2 bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
+        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-3 bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
+        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-2 bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
     } else {
         inputBoxHTML = `<input type="text" id="fill-input" class="input-stylish text-center text-sm md:text-base font-black py-3 w-full shadow-sm focus:ring-2 focus:ring-[color:var(--accent-primary)] transition-all" placeholder="اكتب الكلمة هنا..." value="${State.fillVal}" autocomplete="off">`;
     }
