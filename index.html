@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الاختبار الشامل والموسع</title>
+    
+    <!-- مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- الخطوط من Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- استدعاء ملف الستايل الخارجي -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="p-2 md:p-4 font-sans text-[color:var(--text-main)] bg-[color:var(--bg-main)]">
+
+    <div class="max-w-6xl mx-auto" id="app-container" style="font-size: 16px;">
+        
+        <!-- الهيدر العلوي الأساسي (يختفي عند النزول لأسفل) -->
+        <header id="main-header" class="glass-panel p-4 mb-6 transition-all duration-300 transform origin-top z-40 relative">
+            <div class="flex items-center justify-between gap-4">
+                
+                <!-- زر القائمة (Hamburger) يظهر في الشاشات الصغيرة فقط بالأعلى -->
+                <button id="top-nav-btn" class="md:hidden px-3 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm font-bold flex items-center justify-center gap-2 h-10 transition-all hover:bg-[color:var(--bg-panel-hover)]">
+                    <span class="text-xl leading-none">☰</span>
+                    <span class="hidden sm:inline text-sm">الأقسام</span>
+                </button>
+
+                <!-- حاوية التبويبات (للشاشات الكبيرة بالأعلى) -->
+                <nav id="top-nav-menu" class="hidden md:flex flex-wrap justify-start items-center gap-2 flex-1">
+                    <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
+                    <button class="pill-btn" data-tab="qa">الأسئلة</button>
+                    <button class="pill-btn" data-tab="cards">البطاقات</button>
+                    <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
+                    <button class="pill-btn" data-tab="mcq">اختياري</button>
+                    <button class="pill-btn" data-tab="fill">الفراغات</button>
+                    <button class="pill-btn" data-tab="comp">المقارنات</button>
+                </nav>
+
+                <!-- زر الإعدادات بالأعلى -->
+                <button id="top-settings-btn" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] text-xl md:text-2xl hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-sm shrink-0 mr-auto md:mr-0">
+                    ⚙️
+                </button>
+
+            </div>
+        </header>
+
+        <!-- الأزرار العائمة (تظهر على الجانب عند النزول، بدون حاوية، أحدهما فوق الآخر) -->
+        <div id="floating-actions" class="fixed top-1/2 right-4 transform -translate-y-1/2 flex flex-col gap-4 z-[100] transition-all duration-500 translate-x-20 opacity-0 pointer-events-none">
+            <button id="side-nav-btn" class="w-12 h-12 md:w-14 md:h-14 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] text-[color:var(--accent-primary)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-2xl text-2xl md:text-3xl font-black focus:outline-none">
+                ☰
+            </button>
+            <button id="side-settings-btn" class="w-12 h-12 md:w-14 md:h-14 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-2xl text-2xl md:text-3xl focus:outline-none">
+                ⚙️
+            </button>
+        </div>
+
+        <!-- منطقة عرض المحتوى (الأسئلة وغيرها) -->
+        <div id="content-area" class="glass-panel p-4 md:p-6 min-h-[70vh]"></div>
+
+    </div>
+
+    <!-- نافذة الإعدادات المنبثقة (Modal) -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-2xl shadow-2xl p-5 w-full max-w-sm flex flex-col gap-4 relative transform scale-95 transition-transform duration-300" id="settings-modal-content">
+            <button id="close-settings-btn" class="absolute top-3 left-4 text-xl font-black text-[color:var(--accent-danger)] hover:scale-110 transition-transform focus:outline-none">×</button>
+            <h3 class="text-lg font-black text-center text-[color:var(--accent-primary)] mb-1 border-b-2 border-dashed border-[color:var(--border-color)] pb-2">الإعدادات</h3>
+            
+            <div>
+                <label class="block text-xs font-black text-[color:var(--text-muted)] mb-2">تخصيص المظهر:</label>
+                <select id="theme-select" class="w-full p-2 text-sm border-2 border-[color:var(--border-color)] rounded-lg bg-[color:var(--bg-panel)] text-[color:var(--text-main)] font-bold focus:ring-0 cursor-pointer outline-none">
+                    <option value="0">الأخضر الغابي (فاتح)</option>
+                    <option value="1">الأخضر الرمادي</option>
+                    <option value="2">الوضع الليلي</option>
+                    <option value="3">الرمادي</option>
+                </select>
+            </div>
+
+            <div class="flex justify-between items-center border-t-2 border-dashed border-[color:var(--border-color)] pt-3">
+                <span class="text-xs font-black text-[color:var(--text-muted)]">حجم النص:</span>
+                <div class="flex gap-2">
+                    <button id="btn-font-down" class="w-10 h-10 flex justify-center items-center bg-[color:var(--bg-panel)] border-2 border-[color:var(--border-color)] rounded-lg hover:bg-[color:var(--bg-panel-hover)] font-black text-sm transition-all shadow-sm focus:outline-none">-A</button>
+                    <button id="btn-font-up" class="w-10 h-10 flex justify-center items-center bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] border-2 border-[color:var(--accent-primary)] rounded-lg hover:opacity-90 font-black text-sm transition-all shadow-sm focus:outline-none">+A</button>
+                </div>
+            </div>
+
+            <div class="border-t-2 border-dashed border-[color:var(--border-color)] pt-3">
+                <button id="btn-reset" class="w-full p-3 bg-[color:var(--accent-danger)] text-white font-black text-sm rounded-lg hover:opacity-90 transition-all shadow-md flex justify-center items-center gap-2 focus:outline-none">
+                    <span class="text-lg">🔄</span> مسح وبدء من جديد
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الأقسام المنبثقة (Modal) للتحكم السريع أثناء الطفو أو الموبايل -->
+    <div id="nav-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-2xl shadow-2xl p-5 w-full max-w-sm flex flex-col gap-3 relative transform scale-95 transition-transform duration-300" id="nav-modal-content">
+            <button id="close-nav-btn" class="absolute top-3 left-4 text-xl font-black text-[color:var(--accent-danger)] hover:scale-110 transition-transform focus:outline-none">×</button>
+            <h3 class="text-lg font-black text-center text-[color:var(--accent-primary)] mb-1 border-b-2 border-dashed border-[color:var(--border-color)] pb-2">اختر القسم</h3>
+            
+            <div class="flex flex-col gap-1.5">
+                <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
+                <button class="pill-btn" data-tab="qa">الأسئلة</button>
+                <button class="pill-btn" data-tab="cards">البطاقات</button>
+                <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
+                <button class="pill-btn" data-tab="mcq">اختياري</button>
+                <button class="pill-btn" data-tab="fill">الفراغات</button>
+                <button class="pill-btn" data-tab="comp">المقارنات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- استدعاء ملفات البيانات المفككة -->
+    <script src="./data/data.Mind.Map.js"></script>
+    <script src="./data/data.Lesson.Questions.js"></script>
+    <script src="./data/data.Mind.Map.1.js"></script>
+    <script src="./data/data.Flash.Cards.js"></script>
+    <script src="./data/data.Flash.Cards.1.js"></script>
+    <script src="./data/data.qz.True.False.js"></script>
+    <script src="./data/data.qz.True.False.1.js"></script>
+    <script src="./data/data.qz.Multiple.Choice.js"></script>
+    <script src="./data/data.qz.Multiple.1.Choice.js"></script>
+    <script src="./data/data.qz.Fill.Blank.js"></script>
+    <script src="./data/data.qz.Fill.Blank.1.js"></script>
+    <script src="./data/data.qz.Compare.js"></script>
+    <script src="./data/data.qz.Compare.1.js"></script>
+
+    <!-- استدعاء ملف السكربت الرئيسي -->
+    <script src="./js/script.js"></script>
+</body>
+</html>
