@@ -471,7 +471,7 @@ function renderQA() {
 function renderCards() {
     const active = State.activeSet.cards;
     const currentData = DB.cards[active];
-    if(!currentData || currentData.length === 0) return getProgressBar(0, 0, 'cards') + '<div class="text-center p-4">لا توجد بطاقات</div>';
+    if(!currentData || currentData.length === 0) return getProgressBar(0, 0, 'cards') + '<div class="text-center p-4">لا توجد بيانات</div>';
     if (State.cardsIdx >= currentData.length) return renderFinishScreen('البطاقات الذكية', currentData.length, currentData.length, 'cards');
     
     const data = currentData[State.cardsIdx];
@@ -498,15 +498,31 @@ function renderTF() {
     
     const data = currentData[State.tfIdx]; 
     let msgHTML = '';
+    
     if (State.tfChecked) {
         const isCorrect = State.tfSelected === data.a;
-        // إزالة الشفافية وجعل اللون صلباً لضمان وضوح النص
         msgHTML = `
             <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ دقيق!' : '❌ خطأ! الجواب: ' + (data.a ? 'صواب' : 'خطأ')}</div>
                 ${data.exp ? `<div class="pt-2 border-t border-white/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
             </div>
         `;
+    }
+
+    let trueClasses = "opt-btn p-3 rounded-xl font-black text-sm md:text-base transition-all ";
+    let falseClasses = "opt-btn p-3 rounded-xl font-black text-sm md:text-base transition-all ";
+
+    if (State.tfChecked) {
+        if (data.a === true) trueClasses += "correct";
+        else if (State.tfSelected === true) trueClasses += "wrong";
+        else trueClasses += "opacity-50 grayscale";
+
+        if (data.a === false) falseClasses += "correct";
+        else if (State.tfSelected === false) falseClasses += "wrong";
+        else falseClasses += "opacity-50 grayscale";
+    } else {
+        if (State.tfSelected === true) trueClasses += "selected";
+        if (State.tfSelected === false) falseClasses += "selected";
     }
     
     return `
@@ -516,8 +532,8 @@ function renderTF() {
             <h3 class="text-base md:text-lg font-black text-center leading-relaxed mt-2">${data.q}</h3>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <button class="opt-btn p-3 rounded-xl font-black text-sm md:text-base ${State.tfSelected === true ? 'selected' : ''}" data-val="true">✅ صواب</button>
-            <button class="opt-btn p-3 rounded-xl font-black text-sm md:text-base ${State.tfSelected === false ? 'selected' : ''}" data-val="false">❌ خطأ</button>
+            <button class="${trueClasses}" data-val="true">✅ صواب</button>
+            <button class="${falseClasses}" data-val="false">❌ خطأ</button>
         </div>
         ${msgHTML}
         <div class="flex justify-center mt-5">
@@ -546,7 +562,6 @@ function renderMCQ() {
     
     if (State.mcqChecked) {
         const isCorrect = State.mcqSelected === data.correct;
-        // إزالة الشفافية وجعل اللون صلباً لضمان وضوح النص
         msgHTML = `
             <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-white border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-white border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ صح!' : '❌ خطأ!'}</div>
