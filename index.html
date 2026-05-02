@@ -15,52 +15,40 @@
     <!-- استدعاء ملف الستايل الخارجي -->
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body class="p-2 md:p-4 font-sans text-[color:var(--text-main)] bg-[color:var(--bg-main)]">
+<body class="bg-[color:var(--bg-main)] font-sans text-[color:var(--text-main)]">
 
-    <div class="max-w-6xl mx-auto" id="app-container" style="font-size: 16px;">
-        
-        <!-- الهيدر العلوي الأساسي (يختفي عند النزول لأسفل) -->
-        <header id="main-header" class="glass-panel p-4 mb-6 transition-all duration-300 transform origin-top z-40 relative">
-            <div class="flex items-center justify-between gap-4">
-                
-                <!-- زر القائمة (Hamburger) يظهر في الشاشات الصغيرة فقط بالأعلى -->
-                <button id="top-nav-btn" class="md:hidden px-3 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm font-bold flex items-center justify-center gap-2 h-10 transition-all hover:bg-[color:var(--bg-panel-hover)]">
-                    <span class="text-xl leading-none">☰</span>
-                    <span class="hidden sm:inline text-sm">الأقسام</span>
-                </button>
+    <!-- الهيدر العائم والذكي (Docked on top with Autohide) -->
+    <div id="header-wrapper" class="fixed top-0 left-0 right-0 z-[100] p-2 md:p-4 transition-transform duration-300">
+        <header class="glass-panel p-3 max-w-6xl mx-auto flex items-center justify-between gap-3 shadow-xl">
+            
+            <!-- زر القائمة (Hamburger) للجوال -->
+            <button id="top-nav-btn" class="md:hidden px-4 py-2 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm font-bold flex items-center justify-center hover:bg-[color:var(--bg-panel-hover)] transition-all focus:outline-none">
+                <span class="text-2xl leading-none">☰</span>
+            </button>
 
-                <!-- حاوية التبويبات (للشاشات الكبيرة بالأعلى) -->
-                <nav id="top-nav-menu" class="hidden md:flex flex-wrap justify-start items-center gap-2 flex-1">
-                    <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
-                    <button class="pill-btn" data-tab="qa">الأسئلة</button>
-                    <button class="pill-btn" data-tab="cards">البطاقات</button>
-                    <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
-                    <button class="pill-btn" data-tab="mcq">اختياري</button>
-                    <button class="pill-btn" data-tab="fill">الفراغات</button>
-                    <button class="pill-btn" data-tab="comp">المقارنات</button>
-                </nav>
+            <!-- حاوية التبويبات (للديسكتوب) -->
+            <nav id="top-nav-menu" class="hidden md:flex flex-wrap justify-center items-center gap-2 flex-1">
+                <button class="pill-btn active" data-tab="mindmap">المشجرة</button>
+                <button class="pill-btn" data-tab="qa">الأسئلة</button>
+                <button class="pill-btn" data-tab="cards">البطاقات</button>
+                <button class="pill-btn" data-tab="tf">صواب وخطأ</button>
+                <button class="pill-btn" data-tab="mcq">اختياري</button>
+                <button class="pill-btn" data-tab="fill">الفراغات</button>
+                <button class="pill-btn" data-tab="comp">المقارنات</button>
+            </nav>
 
-                <!-- زر الإعدادات بالأعلى -->
-                <button id="top-settings-btn" class="w-10 h-10 md:w-12 md:h-12 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] text-xl md:text-2xl hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-sm shrink-0 mr-auto md:mr-0">
-                    ⚙️
-                </button>
+            <!-- زر الإعدادات (ثابت في الجوال والديسكتوب) -->
+            <button id="top-settings-btn" class="px-4 py-2 text-[color:var(--accent-primary)] bg-[color:var(--bg-panel-solid)] rounded-lg border-2 border-[color:var(--border-color)] shadow-sm flex items-center justify-center hover:bg-[color:var(--bg-panel-hover)] transition-all ml-auto md:ml-0 focus:outline-none">
+                <span class="text-2xl leading-none">⚙️</span>
+            </button>
 
-            </div>
         </header>
+    </div>
 
-        <!-- الأزرار العائمة (تظهر على الجانب عند النزول، بدون حاوية، أحدهما فوق الآخر) -->
-        <div id="floating-actions" class="fixed top-1/2 right-4 transform -translate-y-1/2 flex flex-col gap-4 z-[100] transition-all duration-500 translate-x-20 opacity-0 pointer-events-none">
-            <button id="side-nav-btn" class="w-12 h-12 md:w-14 md:h-14 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] text-[color:var(--accent-primary)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-2xl text-2xl md:text-3xl font-black focus:outline-none">
-                ☰
-            </button>
-            <button id="side-settings-btn" class="w-12 h-12 md:w-14 md:h-14 flex justify-center items-center bg-[color:var(--bg-panel-solid)] rounded-full border-2 border-[color:var(--border-color)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-2xl text-2xl md:text-3xl focus:outline-none">
-                ⚙️
-            </button>
-        </div>
-
-        <!-- منطقة عرض المحتوى (الأسئلة وغيرها) -->
+    <!-- الحاوية الأساسية (مع إزاحة علوية لمنع التداخل مع الهيدر العائم) -->
+    <div class="max-w-6xl mx-auto pt-24 md:pt-28 pb-10 px-2 md:px-4" id="app-container" style="font-size: 16px;">
+        <!-- منطقة عرض المحتوى -->
         <div id="content-area" class="glass-panel p-4 md:p-6 min-h-[70vh]"></div>
-
     </div>
 
     <!-- نافذة الإعدادات المنبثقة (Modal) -->
@@ -95,7 +83,7 @@
         </div>
     </div>
 
-    <!-- نافذة الأقسام المنبثقة (Modal) للتحكم السريع أثناء الطفو أو الموبايل -->
+    <!-- نافذة الأقسام المنبثقة للجوال (Modal) -->
     <div id="nav-modal" class="fixed inset-0 bg-black/60 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
         <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-2xl shadow-2xl p-5 w-full max-w-sm flex flex-col gap-3 relative transform scale-95 transition-transform duration-300" id="nav-modal-content">
             <button id="close-nav-btn" class="absolute top-3 left-4 text-xl font-black text-[color:var(--accent-danger)] hover:scale-110 transition-transform focus:outline-none">×</button>
@@ -113,7 +101,7 @@
         </div>
     </div>
 
-    <!-- استدعاء ملفات البيانات المفككة -->
+    <!-- استدعاء ملفات البيانات -->
     <script src="./data/data.Mind.Map.js"></script>
     <script src="./data/data.Lesson.Questions.js"></script>
     <script src="./data/data.Mind.Map.1.js"></script>
@@ -128,7 +116,7 @@
     <script src="./data/data.qz.Compare.js"></script>
     <script src="./data/data.qz.Compare.1.js"></script>
 
-    <!-- استدعاء ملف السكربت الرئيسي -->
+    <!-- استدعاء السكربت الرئيسي -->
     <script src="./js/script.js"></script>
 </body>
 </html>
