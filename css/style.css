@@ -1,4 +1,3 @@
-/* الإعدادات الافتراضية للثيم + رموز التصميم */
 :root {
     --bg-main: #DADADA;
     --bg-panel: #DADADA;
@@ -7,12 +6,11 @@
     --border-color: #4C6054;
     --accent-primary: #4C6054;
     --accent-text: #ffffff;
-    --accent-green: #359c06;
-    --accent-danger: #a94442;
+    --accent-green: #059669;
+    --accent-danger: #ef4444;
     --text-main: hsl(0, 0%, 17%);
     --text-muted: #4C6054;
 
-    /* الخط الأساسي: Tajawal */
     --font-family-base: 'Tajawal', system-ui, -apple-system, sans-serif;
     --fs-body: 1.125rem; 
     --fs-h1: 2rem;       
@@ -42,7 +40,6 @@ h1 { font-size: var(--fs-h1); font-weight: 800; }
 h2 { font-size: var(--fs-h2); font-weight: 700; }
 h3 { font-size: var(--fs-h3); font-weight: 700; }
 p { margin-bottom: 1.2rem; }
-
 input, textarea { user-select: text !important; }
 
 body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
@@ -56,10 +53,9 @@ body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* تنسيق أزرار التنقل */
 .pill-btn {
     flex: 1 1 auto; 
-    min-width: 120px; 
+    min-width: 100px; 
     padding: 0.5rem 1rem;
     border-radius: 9999px; 
     font-weight: 800; 
@@ -87,40 +83,32 @@ body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
 }
 
 .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-@keyframes fadeIn { 
-    from { opacity: 0; transform: translateY(5px); } 
-    to { opacity: 1; transform: translateY(0); } 
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* الخريطة الشجرية */
+/* الأكورديون (حركة الطي) */
+.accordion-item { border: 2px solid var(--border-color); border-radius: 0.75rem; margin-bottom: 1rem; overflow: hidden; background-color: var(--bg-panel-solid); }
+.accordion-header { cursor: pointer; transition: background 0.3s; }
+.accordion-icon { transition: transform 0.3s ease; }
+.accordion-item.active .accordion-icon { transform: rotate(180deg); }
+.accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background-color: var(--bg-main); }
+.accordion-item.active .accordion-body { max-height: 5000px; } 
+
 .tree-list { list-style-type: none; position: relative; margin-right: 0.5rem; }
 .tree-list:not(.root-list)::before { content: ''; position: absolute; top: 0; bottom: 0; right: 0.25rem; width: 2px; background: var(--border-color); border-radius: 2px; }
 .tree-node { position: relative; margin-top: 0.5rem; margin-bottom: 0.5rem; }
 .tree-node::before { content: ''; position: absolute; top: 1rem; right: -0.25rem; width: 0.5rem; height: 2px; background: var(--border-color); border-radius: 2px; }
 .root-list > .tree-node::before { display: none; }
-.tree-content {
-    display: inline-flex; align-items: center; padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem; font-weight: 700; border: 2px solid var(--border-color);
-    background-color: var(--bg-panel-solid); color: var(--text-main); 
-    position: relative; z-index: 2;
-}
+.tree-content { display: inline-flex; align-items: center; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-weight: 700; border: 2px solid var(--border-color); background-color: var(--bg-panel-solid); color: var(--text-main); position: relative; z-index: 2; }
 .tree-content.root-node { background-color: var(--accent-primary); color: var(--accent-text); }
 .toggle-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: rgba(128,128,128,0.2); border-radius: 50%; margin-left: 0.5rem; }
 
-/* البطاقات التفاعلية */
 .flip-card { perspective: 1000px; min-height: 200px; width: 100%; cursor: pointer; }
 .flip-card-inner { display: grid; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; }
 .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-.flip-card-front, .flip-card-back {
-    grid-area: 1 / 1; width: 100%; height: 100%; backface-visibility: hidden;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border-radius: 1rem; text-align: center; border: 2px solid var(--border-color);
-    padding: 1.5rem;
-}
+.flip-card-front, .flip-card-back { grid-area: 1 / 1; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 1rem; text-align: center; border: 2px solid var(--border-color); padding: 1.5rem; }
 .flip-card-front { background-color: var(--bg-panel-solid); color: var(--text-main); }
 .flip-card-back { background-color: var(--accent-primary); color: var(--accent-text); transform: rotateY(180deg); }
 
-/* الأزرار والمدخلات */
 .action-btn { background-color: var(--accent-primary); color: var(--accent-text); border-radius: 0.75rem; font-weight: 800; width: 100%; border: 2px solid var(--border-color); cursor: pointer; }
 .action-btn:disabled { opacity: 0.5; background-color: var(--bg-panel-solid); color: var(--text-muted); cursor: not-allowed; }
 .opt-btn { background-color: var(--bg-panel-solid); border: 2px solid var(--border-color); color: var(--text-main); cursor: pointer; }
@@ -129,7 +117,5 @@ body, .glass-panel, button, input, select, div, span, h1, h2, h3, ul, li {
 .opt-btn.wrong { background-color: var(--accent-danger) !important; color: #ffffff !important; border-color: var(--accent-danger) !important; }
 .input-stylish { width: 100%; border-radius: 0.75rem; border: 2px solid var(--border-color); background-color: var(--bg-panel-solid); color: var(--text-main); outline: none; }
 .input-stylish:focus { border-color: var(--accent-primary); background-color: var(--bg-panel); }
-
-/* شريط التقدم */
 .progress-container { height: 6px; background-color: var(--bg-panel-solid); border-radius: 3px; overflow: hidden; border: 1px solid var(--border-color); }
 .progress-bar { height: 100%; background-color: var(--accent-primary); transition: width 0.3s ease; }
