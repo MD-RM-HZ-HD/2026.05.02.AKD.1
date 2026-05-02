@@ -1,4 +1,3 @@
-// --- تهيئة قاعدة البيانات وربط المتغيرات (للملفات الخارجية) ---
 const DB = {
     mindmapTree: {
         1: typeof Mind_Map !== 'undefined' ? Mind_Map.children : null,
@@ -29,7 +28,7 @@ const DB = {
     }
 };
 
-// --- المظاهر ---
+// --- المظاهر (الوضع الليلي تم تعيينه لـ #000000 بالكامل) ---
 const THEMES = [
     { 
         name: "الأخضر الغابي (فاتح)", 
@@ -43,33 +42,33 @@ const THEMES = [
             '--accent-text': '#ffffff', 
             '--text-main': '#111111', 
             '--text-muted': '#4C6054', 
-            '--accent-green': '#10b981', 
+            '--accent-green': '#059669', 
             '--accent-danger': '#ef4444' 
         } 
     },
     { 
         name: "الأخضر الرمادي", 
-        vars: { '--bg-main': 'linear-gradient(135deg, #71897b 0%, #4b6856 100%)', '--bg-panel': 'rgba(245, 247, 245, 0.9)', '--bg-panel-solid': '#f4f7f5', '--bg-panel-hover': '#e2e8e4', '--border-color': '#4b6856', '--accent-primary': '#283b2f', '--accent-text': '#ffffff', '--text-main': '#111111', '--text-muted': '#4b6856', '--accent-green': '#10b981', '--accent-danger': '#ef4444' } 
+        vars: { '--bg-main': 'linear-gradient(135deg, #71897b 0%, #4b6856 100%)', '--bg-panel': 'rgba(245, 247, 245, 0.9)', '--bg-panel-solid': '#f4f7f5', '--bg-panel-hover': '#e2e8e4', '--border-color': '#4b6856', '--accent-primary': '#283b2f', '--accent-text': '#ffffff', '--text-main': '#111111', '--text-muted': '#4b6856', '--accent-green': '#059669', '--accent-danger': '#ef4444' } 
     },
     { 
         name: "الوضع الليلي", 
         vars: { 
             '--bg-main': '#000000', 
             '--bg-panel': '#000000', 
-            '--bg-panel-solid': '#000000',
-            '--bg-panel-hover': '#1e2621', 
+            '--bg-panel-solid': '#000000', 
+            '--bg-panel-hover': '#111111', 
             '--border-color': '#4C6054', 
             '--accent-primary': '#4C6054', 
             '--accent-text': '#DADADA', 
             '--text-main': '#DADADA', 
             '--text-muted': '#8a9f91', 
-            '--accent-green': '#10b981', 
+            '--accent-green': '#059669', 
             '--accent-danger': '#ef4444' 
         } 
     },
     { 
         name: "الرمادي", 
-        vars: { '--bg-main': 'hsl(210, 13%, 95%)', '--bg-panel': 'hsl(204, 12.2%, 91.96%)', '--bg-panel-solid': 'hsl(210, 13%, 88%)', '--bg-panel-hover': 'hsl(204, 12%, 75%)', '--border-color': 'hsl(204, 12%, 65%)', '--accent-primary': 'hsl(203, 12%, 35%)', '--accent-text': '#ffffff', '--text-main': '#333333', '--text-muted': '#8d8d8d', '--accent-green': '#359c06', '--accent-danger': '#a94442' } 
+        vars: { '--bg-main': 'hsl(210, 13%, 95%)', '--bg-panel': 'hsl(204, 12.2%, 91.96%)', '--bg-panel-solid': 'hsl(210, 13%, 88%)', '--bg-panel-hover': 'hsl(204, 12%, 75%)', '--border-color': 'hsl(204, 12%, 65%)', '--accent-primary': 'hsl(203, 12%, 35%)', '--accent-text': '#ffffff', '--text-main': '#333333', '--text-muted': '#8d8d8d', '--accent-green': '#059669', '--accent-danger': '#a94442' } 
     }
 ];
 
@@ -218,11 +217,10 @@ function initApp() {
         }
     });
 
-    // استشعار التمرير لعمل Autohide للهيدر العائم
+    // استشعار التمرير لعمل Autohide للهيدر 
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         const currentScrollY = window.scrollY;
-        // إخفاء عند النزول، إظهار عند الصعود (مع إضافة هامش 50 بكسل لتجنب الارتجاج)
         if (currentScrollY > 50 && currentScrollY > lastScrollY) {
             DOM.headerWrapper.classList.add('-translate-y-full');
         } else {
@@ -249,19 +247,13 @@ function initApp() {
             if(btn.dataset.tab === State.tab) btn.classList.add('active'); 
             btn.addEventListener('click', (e) => {
                 const targetTab = e.target.dataset.tab;
-                
                 DOM.tabs.forEach(b => {
                     b.classList.remove('active');
                     if (b.dataset.tab === targetTab) b.classList.add('active');
                 });
-                
                 State.tab = targetTab; 
                 StateManager.saveState(State);
-                
-                if (DOM.navModal && !DOM.navModal.classList.contains('hidden')) {
-                    closeModal(DOM.navModal, DOM.navModalContent);
-                }
-
+                if (DOM.navModal && !DOM.navModal.classList.contains('hidden')) { closeModal(DOM.navModal, DOM.navModalContent); }
                 renderTab();
             });
         });
@@ -356,7 +348,7 @@ function renderFinishScreen(title, score, total, tabKey) {
                 <div class="text-4xl font-black text-[color:var(--accent-primary)] mb-2">${score} <span class="text-xl text-[color:var(--text-muted)] opacity-60">/ ${total}</span></div>
                 <div class="text-sm font-bold text-[color:var(--text-muted)] bg-[color:var(--bg-panel)] py-1 px-4 rounded-full border border-[color:var(--border-color)] inline-block">النسبة: ${perc}%</div>
             </div>
-            <button class="action-btn max-w-xs text-sm py-3" onclick="window.restartQuiz('${tabKey}')">🔄 إعادة الاختبار مجدداً</button>
+            <button class="action-btn max-w-xs text-sm py-3" onclick="window.restartQuiz('${tabKey}')">🔄 إعادة الاختبار</button>
         </div>
     `;
 }
@@ -434,7 +426,6 @@ function renderMindmap() {
     `;
 }
 
-// دالة العرض المحدثة لتبويب الأسئلة (بدون حاويات ثقيلة)
 function renderQA() {
     const active = State.activeSet.qa || 1; 
     const currentData = DB.qa[active];
@@ -442,13 +433,16 @@ function renderQA() {
 
     let html = '';
     
-    currentData.forEach((section) => {
+    currentData.forEach((section, secIndex) => {
+        const isActive = secIndex === 0 ? 'active' : '';
         html += `
-            <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] rounded-xl overflow-hidden mb-6 shadow-sm animate-fade-in">
-                <div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">
-                    📚 ${section.lesson}
-                </div>
-                <div class="p-3 md:p-5 bg-[color:var(--bg-main)]">
+            <div class="accordion-item ${isActive}">
+                <button class="accordion-header bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] w-full flex justify-between items-center font-black text-sm md:text-base py-3 px-4 focus:outline-none border-none">
+                    <span>📚 ${section.lesson}</span>
+                    <span class="accordion-icon font-black">▼</span>
+                </button>
+                <div class="accordion-body">
+                    <div class="p-3 md:p-5 flex flex-col gap-4">
         `;
         
         section.questions.forEach((item, index) => {
@@ -468,7 +462,7 @@ function renderQA() {
             `;
         });
         
-        html += `</div></div>`;
+        html += `</div></div></div>`;
     });
     return `<div class="pb-4">${html}</div>`;
 }
@@ -490,7 +484,7 @@ function renderCards() {
         </div>
         <div class="flex justify-center gap-2 mt-4">
             <button class="action-btn text-sm py-2 max-w-[100px] bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] border border-[color:var(--border-color)] shadow-sm" onclick="window.move(-1)" ${State.cardsIdx === 0 ? 'disabled' : ''}>السابق</button>
-            <button class="action-btn text-sm py-2 max-w-[150px] shadow-sm" id="btn-next">التالي 🡄</button>
+            <button class="action-btn text-sm py-2 max-w-[150px] shadow-sm" id="btn-next">التالي</button>
         </div>
     `;
 }
@@ -506,7 +500,7 @@ function renderTF() {
     if (State.tfChecked) {
         const isCorrect = State.tfSelected === data.a;
         msgHTML = `
-            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
+            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ دقيق!' : '❌ خطأ! الجواب: ' + (data.a ? 'صواب' : 'خطأ')}</div>
                 ${data.exp ? `<div class="pt-2 border-t border-[color:var(--accent-text)]/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
             </div>
@@ -525,7 +519,7 @@ function renderTF() {
         </div>
         ${msgHTML}
         <div class="flex justify-center mt-5">
-            <button class="action-btn max-w-xs text-sm py-3" id="btn-next" ${!State.tfChecked ? 'disabled' : ''}>${State.tfIdx === currentData.length - 1 ? 'إنهاء الاختبار' : 'التالي 🡄'}</button>
+            <button class="action-btn max-w-xs text-sm py-3" id="btn-next" ${!State.tfChecked ? 'disabled' : ''}>${State.tfIdx === currentData.length - 1 ? 'إنهاء الاختبار' : 'التالي'}</button>
         </div>
     `;
 }
@@ -539,7 +533,7 @@ function renderMCQ() {
     const data = currentData[State.mcqIdx]; 
     let msgHTML = '';
     let optsHTML = data.opts.map((opt, i) => {
-        let classes = "opt-btn p-3 rounded-xl font-bold text-right mb-2 block w-full text-sm md:text-base transition-all ";
+        let classes = "opt-btn p-2 rounded-xl font-bold text-right mb-1 block w-full text-sm md:text-base transition-all ";
         if (State.mcqChecked) { 
             if (i === data.correct) classes += "correct"; 
             else if (i === State.mcqSelected) classes += "wrong"; 
@@ -551,7 +545,7 @@ function renderMCQ() {
     if (State.mcqChecked) {
         const isCorrect = State.mcqSelected === data.correct;
         msgHTML = `
-            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)] text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)] text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
+            <div class="p-3 mt-4 rounded-xl border-2 animate-fade-in ${isCorrect ? 'bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)]' : 'bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)]'}">
                 <div class="font-black text-sm text-center mb-2">${isCorrect ? '✅ صح!' : '❌ خطأ!'}</div>
                 ${data.exp ? `<div class="pt-2 border-t border-[color:var(--accent-text)]/30 text-xs font-bold leading-relaxed text-right">💡 ${data.exp}</div>` : ''}
             </div>
@@ -564,7 +558,7 @@ function renderMCQ() {
         <div class="mt-2">${optsHTML}</div>
         ${msgHTML}
         <div class="flex justify-center mt-5">
-            <button class="action-btn max-w-xs text-sm py-3" id="btn-next" ${!State.mcqChecked ? 'disabled' : ''}>${State.mcqIdx === currentData.length - 1 ? 'إنهاء الاختبار' : 'التالي 🡄'}</button>
+            <button class="action-btn max-w-xs text-sm py-3" id="btn-next" ${!State.mcqChecked ? 'disabled' : ''}>${State.mcqIdx === currentData.length - 1 ? 'إنهاء الاختبار' : 'التالي'}</button>
         </div>
     `;
 }
@@ -585,8 +579,8 @@ function renderFill() {
         if (Array.isArray(data.a)) { isCorrect = data.a.some(ans => ans.trim() === userVal || userVal.includes(ans.trim())); correctAnswer = data.a[0]; } 
         else { isCorrect = userVal !== '' && (data.a.includes(userVal) || userVal.includes(data.a)); correctAnswer = data.a; }
 
-        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-3 bg-[color:var(--accent-green)] text-[color:var(--accent-text)] border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
-        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-2 bg-[color:var(--accent-danger)] text-[color:var(--accent-text)] border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
+        if (isCorrect) { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-3 bg-[color:var(--accent-green)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-green)] shadow-sm animate-fade-in cursor-default">🎉 إجابة صحيحة: ${userVal}</div>`; } 
+        else { inputBoxHTML = `<div class="input-stylish w-full text-center text-sm md:text-base font-black py-2 bg-[color:var(--accent-danger)]/90 backdrop-blur-md text-[color:var(--accent-text)] border-[color:var(--accent-danger)] shadow-sm animate-fade-in flex flex-col justify-center items-center gap-1 cursor-default">${userVal ? `<span class="line-through opacity-75 text-xs">❌ إجابتك: ${userVal}</span>` : ''}<span class="text-sm md:text-base">💡 الصواب: ${correctAnswer}</span></div>`; }
     } else {
         inputBoxHTML = `<input type="text" id="fill-input" class="input-stylish text-center text-sm md:text-base font-black py-3 w-full shadow-sm focus:ring-2 focus:ring-[color:var(--accent-primary)] transition-all" placeholder="اكتب الكلمة هنا..." value="${State.fillVal}" autocomplete="off">`;
     }
@@ -596,7 +590,7 @@ function renderFill() {
         <div class="bg-[color:var(--bg-panel-solid)] border-2 border-[color:var(--border-color)] p-4 md:p-6 rounded-xl mt-4 mb-6 text-center shadow-sm"><div class="text-base md:text-lg font-black leading-loose">${textHTML}</div></div>
         <div class="relative w-full max-w-md mx-auto mb-2">${inputBoxHTML}</div>
         ${!State.fillChecked ? `<div class="flex justify-center mt-6"><button class="action-btn max-w-xs bg-[color:var(--bg-panel-solid)] text-[color:var(--text-main)] text-sm py-3 border-2 border-[color:var(--border-color)] hover:bg-[color:var(--bg-panel-hover)] transition-all shadow-sm flex items-center justify-center gap-2" id="btn-check"><span class="text-xl">✔️</span> تحقق من الإجابة</button></div>` : ''}
-        <div class="flex justify-center mt-6 pt-4 border-t border-dashed border-[color:var(--border-color)]"><button class="action-btn max-w-xs text-sm py-3 shadow-md" id="btn-next" ${!State.fillChecked ? 'disabled' : ''}>${State.fillIdx === currentData.length - 1 ? '🏁 إنهاء القسم' : 'التالية 🡄'}</button></div>
+        <div class="flex justify-center mt-6 pt-4 border-t border-dashed border-[color:var(--border-color)]"><button class="action-btn max-w-xs text-sm py-3 shadow-md" id="btn-next" ${!State.fillChecked ? 'disabled' : ''}>${State.fillIdx === currentData.length - 1 ? '🏁 إنهاء القسم' : 'التالية'}</button></div>
     `;
 }
 
@@ -622,7 +616,7 @@ function renderComp() {
                     </div>
                 </div>
             </div>
-            <div class="flex justify-center mt-12"><button class="action-btn max-w-sm text-xl py-4 shadow-md" id="btn-next">${State.compIdx === currentData.length - 1 ? 'إنهاء القسم' : 'انتقل للمقارنة التالية 🡄'}</button></div>
+            <div class="flex justify-center mt-12"><button class="action-btn max-w-sm text-xl py-4 shadow-md" id="btn-next">${State.compIdx === currentData.length - 1 ? 'إنهاء القسم' : 'التالية'}</button></div>
         `;
     }
 
@@ -647,7 +641,7 @@ function renderComp() {
             <div class="bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] overflow-hidden shadow-sm flex flex-col animate-fade-in"><div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">${data.caseA_label}</div><div class="p-4 bg-[color:var(--bg-main)] flex-1">${colA_HTML}</div></div>
             <div class="bg-[color:var(--bg-panel-solid)] rounded-xl border-2 border-[color:var(--border-color)] overflow-hidden shadow-sm flex flex-col animate-fade-in" style="animation-delay: 0.1s"><div class="bg-[color:var(--accent-primary)] text-[color:var(--accent-text)] text-center font-black text-sm md:text-base py-3 px-4">${data.caseB_label}</div><div class="p-4 bg-[color:var(--bg-main)] flex-1">${colB_HTML}</div></div>
         </div>
-        <div class="flex justify-center mt-6 pt-4 border-t border-dashed border-[color:var(--border-color)]"><button class="action-btn max-w-xs text-sm py-3 shadow-md" id="btn-next">${State.compIdx === currentData.length - 1 ? '🏁 إنهاء القسم' : 'التالية 🡄'}</button></div>
+        <div class="flex justify-center mt-6 pt-4 border-t border-dashed border-[color:var(--border-color)]"><button class="action-btn max-w-xs text-sm py-3 shadow-md" id="btn-next">${State.compIdx === currentData.length - 1 ? '🏁 إنهاء القسم' : 'التالية'}</button></div>
     `;
 }
 
@@ -663,6 +657,10 @@ function attachDynamicListeners() {
     const check = document.getElementById('btn-check'); 
     const flip = document.getElementById('action-flip'); 
     const fillInp = document.getElementById('fill-input');
+    
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => header.parentElement.classList.toggle('active'));
+    });
     
     if(next) next.addEventListener('click', () => window.move(1));
     
